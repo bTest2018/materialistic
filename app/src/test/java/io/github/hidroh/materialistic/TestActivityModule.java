@@ -33,6 +33,7 @@ import io.github.hidroh.materialistic.data.FileDownloader;
 import io.github.hidroh.materialistic.data.ItemManager;
 import io.github.hidroh.materialistic.data.ItemSyncJobServiceTest;
 import io.github.hidroh.materialistic.data.ItemSyncService;
+import io.github.hidroh.materialistic.data.KtSyncDelegate;
 import io.github.hidroh.materialistic.data.MaterialisticDatabase;
 import io.github.hidroh.materialistic.data.ReadabilityClient;
 import io.github.hidroh.materialistic.data.RestServiceFactory;
@@ -149,7 +150,7 @@ public class TestActivityModule {
     private final KeyDelegate keyDelegate = mock(KeyDelegate.class);
     private final RestServiceFactory restServiceFactory = mock(RestServiceFactory.class);
     private final ResourcesProvider resourcesProvider = mock(ResourcesProvider.class);
-    private final SyncDelegate syncDelegate = mock(SyncDelegate.class);
+    private final KtSyncDelegate syncDelegate = mock(KtSyncDelegate.class);
     private final Call.Factory callFactory = mock(Call.Factory.class);
     private final FileDownloader fileDownloader = mock(FileDownloader.class);
     private final SyncScheduler syncScheduler = mock(SyncScheduler.class);
@@ -369,7 +370,7 @@ public class TestActivityModule {
     }
 
     @Provides @Singleton
-    public SyncDelegate provideSyncDelegate() {
+    public KtSyncDelegate provideSyncDelegate() {
         return syncDelegate;
     }
 

@@ -43,12 +43,12 @@ class ItemSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
-        createSyncDelegate().performSync(new SyncDelegate.Job(extras));
+        createSyncDelegate().performSync(new KtSyncDelegate.Job(extras));
     }
 
     @VisibleForTesting
     @NonNull
-    SyncDelegate createSyncDelegate() {
-        return new SyncDelegate(getContext(), mFactory, mReadabilityClient);
+    KtSyncDelegate createSyncDelegate() {
+        return new KtSyncDelegate(getContext(), mFactory, mReadabilityClient);
     }
 }

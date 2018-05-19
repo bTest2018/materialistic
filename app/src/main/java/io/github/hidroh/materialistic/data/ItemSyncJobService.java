@@ -36,7 +36,7 @@ import io.github.hidroh.materialistic.Application;
 public class ItemSyncJobService extends JobService {
     @Inject RestServiceFactory mFactory;
     @Inject ReadabilityClient mReadabilityClient;
-    private final Map<String, SyncDelegate> mSyncDelegates = new HashMap<>();
+    private final Map<String, KtSyncDelegate> mSyncDelegates = new HashMap<>();
 
     @Override
     public void onCreate() {
@@ -50,7 +50,7 @@ public class ItemSyncJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         String jobId = String.valueOf(jobParameters.getJobId());
-        SyncDelegate syncDelegate = createSyncDelegate();
+        KtSyncDelegate syncDelegate = createSyncDelegate();
         mSyncDelegates.put(jobId, syncDelegate);
         syncDelegate.subscribe(token -> {
             if (TextUtils.equals(jobId, token)) {
@@ -58,7 +58,7 @@ public class ItemSyncJobService extends JobService {
                 mSyncDelegates.remove(jobId);
             }
         });
-        syncDelegate.performSync(new SyncDelegate.Job(jobParameters.getExtras()));
+        syncDelegate.performSync(new KtSyncDelegate.Job(jobParameters.getExtras()));
         return true;
     }
 
@@ -73,7 +73,7 @@ public class ItemSyncJobService extends JobService {
 
     @VisibleForTesting
     @NonNull
-    SyncDelegate createSyncDelegate() {
-        return new SyncDelegate(this, mFactory, mReadabilityClient);
+    KtSyncDelegate createSyncDelegate() {
+        return new KtSyncDelegate(this, mFactory, mReadabilityClient);
     }
 }

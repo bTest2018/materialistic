@@ -56,7 +56,7 @@ import static org.robolectric.Shadows.shadowOf;
 public class ItemSyncJobServiceTest {
     private ServiceController<TestItemSyncJobService> controller;
     private TestItemSyncJobService service;
-    @Captor ArgumentCaptor<SyncDelegate.ProgressListener> listenerCaptor;
+    @Captor ArgumentCaptor<KtSyncDelegate.ProgressListener> listenerCaptor;
 
     @Before
     public void setUp() {
@@ -88,11 +88,11 @@ public class ItemSyncJobServiceTest {
     public void testStartJob() {
         JobParameters jobParameters = mock(JobParameters.class);
         when(jobParameters.getExtras())
-                .thenReturn(new SyncDelegate.JobBuilder(service, "1").build().toPersistableBundle());
+                .thenReturn(new KtSyncDelegate.Job(service, "1").toPersistableBundle());
         when(jobParameters.getJobId()).thenReturn(2);
         service.onStartJob(jobParameters);
         verify(service.syncDelegate).subscribe(listenerCaptor.capture());
-        verify(service.syncDelegate).performSync(any(SyncDelegate.Job.class));
+        verify(service.syncDelegate).performSync(any(KtSyncDelegate.Job.class));
         listenerCaptor.getValue().onDone("2");
     }
 
@@ -102,11 +102,11 @@ public class ItemSyncJobServiceTest {
     }
 
     public static class TestItemSyncJobService extends ItemSyncJobService {
-        SyncDelegate syncDelegate = mock(SyncDelegate.class);
+        KtSyncDelegate syncDelegate = mock(KtSyncDelegate.class);
 
         @NonNull
         @Override
-        SyncDelegate createSyncDelegate() {
+        KtSyncDelegate createSyncDelegate() {
             return syncDelegate;
         }
     }

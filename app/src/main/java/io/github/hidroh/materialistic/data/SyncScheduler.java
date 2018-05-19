@@ -20,6 +20,6 @@ import android.content.Context;
 
 public class SyncScheduler {
     public void scheduleSync(Context context, String itemId) {
-        SyncDelegate.scheduleSync(context, new SyncDelegate.JobBuilder(context, itemId).build());
+        KtSyncDelegate.Companion.scheduleSync(context, new KtSyncDelegate.Job(context, itemId));
     }
 }

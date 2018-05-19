@@ -36,6 +36,8 @@ inline fun File.getUri(context: Context, authority: String) =
 inline fun Uri.toSendIntentChooser(context: Context) =
     AppUtils.makeSendIntentChooser(context, this)!!
 
+inline fun String.getItemUri() = AppUtils.createItemUri(this)
+
 fun NotificationCompat.Builder.setChannel(context: Context,
     channelId: String,
     name: CharSequence): NotificationCompat.Builder {

@@ -97,8 +97,7 @@ public class ItemSyncAdapterTest {
                 .apply();
         adapter = new TestItemSyncAdapter(service, new TestRestServiceFactory(), readabilityClient);
         syncPreferences = service.getSharedPreferences(
-                service.getPackageName() +
-                        SyncDelegate.SYNC_PREFERENCES_FILE, Context.MODE_PRIVATE);
+                service.getPackageName() + "_syncpreferences", Context.MODE_PRIVATE);
         syncScheduler = new SyncScheduler();
     }
 
@@ -423,8 +422,7 @@ public class ItemSyncAdapterTest {
         assertThat(shadowNotification.getProgress()).isEqualTo(3); // self + kid 1 + readability
         assertThat(shadowNotification.getMax()).isEqualTo(104); // self + 2 kids + readability + web
 
-        shadowOf(adapter.syncDelegate.mWebView).getWebChromeClient()
-                .onProgressChanged(adapter.syncDelegate.mWebView, 100);
+        adapter.syncDelegate.notifyArticle(100);
 
         verify(kid2Call).enqueue(callbackCapture.capture());
         callbackCapture.getValue().onFailure(null, null);
@@ -478,7 +476,7 @@ public class ItemSyncAdapterTest {
 
     private static class TestItemSyncAdapter extends ItemSyncAdapter {
 
-        SyncDelegate syncDelegate;
+        KtSyncDelegate syncDelegate;
 
         TestItemSyncAdapter(Context context, RestServiceFactory factory, ReadabilityClient readabilityClient) {
             super(context, factory, readabilityClient);
@@ -486,7 +484,7 @@ public class ItemSyncAdapterTest {
 
         @NonNull
         @Override
-        SyncDelegate createSyncDelegate() {
+        KtSyncDelegate createSyncDelegate() {
             syncDelegate = super.createSyncDelegate();
             return syncDelegate;
         }
